@@ -25,9 +25,9 @@ class MaybsQuitView extends SelectListView
       @cancel()
     else
       @setItems([
-        { title: 'Quit', action: 'application:quit' },
-        { title: 'Close view', action: 'core:close' },
-        { title: 'Close window', action: 'window:close' }
+        { title: 'Quit all atom windows', action: 'application:quit' },
+        { title: 'Close current tab', action: 'core:close' },
+        { title: 'Close current atom window', action: 'window:close' }
         { title: 'Cancel' }
       ])
       atom.workspaceView.append(this)
