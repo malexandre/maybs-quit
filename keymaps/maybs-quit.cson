@@ -9,5 +9,5 @@
 # https://atom.io/docs/latest/advanced/keymaps
 '.platform-linux .workspace, .platform-win32 .workspace':
   'ctrl-q': 'maybs-quit:toggle'
-'.platform-darwin .workspace:
+'.platform-darwin .workspace':
   'cmd-q': 'maybs-quit:toggle'
