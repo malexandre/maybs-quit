@@ -1,27 +1,25 @@
-{SelectListView, $$} = require 'atom'
+{$$, SelectListView} = require 'atom-space-pen-views'
 
 module.exports =
 class MaybsQuitView extends SelectListView
-  activate: ->
-    new MaybsQuitView
-
   initialize: ->
     super
-    @addClass('maybs-quit overlay from-top')
-    atom.workspaceView.command "maybs-quit:toggle", => @toggle()
+    @panel = atom.workspace.addModalPanel(item: this, visible: false)
+    @addClass('maybs-quit')
 
-  # Returns an object that can be retrieved when package is activated
-  serialize: ->
+  cancelled: ->
+    @panel.hide()
 
   getFilterKey: ->
     'title'
 
   # Tear down any state and detach
   destroy: ->
-    @detach()
+    @cancel()
+    @panel.destroy()
 
   toggle: ->
-    if @hasParent()
+    if @panel.isVisible()
       @cancel()
     else
       @setItems([
@@ -30,7 +28,8 @@ class MaybsQuitView extends SelectListView
         { title: 'Close current tab', action: 'core:close' },
         { title: 'Cancel' }
       ])
-      atom.workspaceView.append(this)
+      @storeFocusedElement()
+      @panel.show()
       @focusFilterEditor()
 
   viewForItem: ({title, action}) ->
@@ -41,10 +40,4 @@ class MaybsQuitView extends SelectListView
   confirmed: ({title, action}) ->
     @cancel()
     if action
-      for event in atom.commands.findCommands({ target: atom.workspaceView[0] })
-        if event.name is action
-          if event.jQuery
-            atom.workspaceView.trigger event.name
-          else
-            atom.workspaceView[0].dispatchEvent(new CustomEvent(event.name, bubbles: true, cancelable: true))
-          break
+      atom.commands.dispatch atom.views.getView(atom.workspace), action

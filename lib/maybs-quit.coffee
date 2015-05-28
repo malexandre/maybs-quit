@@ -1,13 +1,20 @@
-MaybsQuitView = require './maybs-quit-view'
-
 module.exports =
-  maybsQuitView: null
-
   activate: ->
-    @maybsQuitView = new MaybsQuitView()
+    @stack = []
+    @workspaceSubscription = atom.commands.add 'atom-workspace',
+      'maybs-quit:toggle': => @createMaybsQuitView().toggle()
 
   deactivate: ->
-    @maybsQuitView.destroy()
+    if @maybsQuitView?
+      @maybsQuitView.destroy()
+      @maybsQuitView = null
 
-  serialize: ->
-    maybsQuitViewState: @maybsQuitView.serialize()
+    if @workspaceSubscription?
+      @workspaceSubscription.dispose()
+      @workspaceSubscription = null
+
+  createMaybsQuitView: ->
+    unless @maybsQuitView?
+      MaybsQuitView = require './maybs-quit-view'
+      @maybsQuitView = new MaybsQuitView(@stack)
+    @maybsQuitView
