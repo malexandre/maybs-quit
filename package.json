@@ -1,7 +1,7 @@
 {
   "name": "maybs-quit",
   "main": "./lib/maybs-quit",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Quitting shouldn't be so easy. Modal confirmation dialogs are annoying, so why not show a quick panel instead?",
   "activationCommands": {
     "atom-workspace": "maybs-quit:toggle"
